@@ -3,48 +3,69 @@
 #
 # This file is for the EU868 band. See the examples/ folder for more
 # configuration examples.
+[general]
+log_level=4
 
 [postgresql]
 dsn="postgres://chirpstack_ns:chirpstack_ns@postgresql/chirpstack_ns?sslmode=disable"
+automigrate=true
 
 [redis]
 url="redis://redis:6379"
+max_idle=10
+idle_timeout="5m0s"
 
 [network_server]
 net_id="000000"
+deduplication_delay="200ms"
+device_session_ttl="744h0m0s"
+get_downlink_data_delay="100ms"
+
 
 [network_server.band]
-name="EU868"
+name="CN_470_510"
+dwell_time_400ms=false
+repeater_compatible=false
 
 [network_server.network_settings]
+installation_margin=10
+rx_window=0
+rx1_delay=1
+rx1_dr_offset=0
+rx2_dr=-1
+rx2_frequency=-1
+downlink_tx_power=-1
+disable_mac_commands=true
+disable_adr=false
+enabled_uplink_channels=[80,81,82,83,84,85,86,87]
 
-  [[network_server.network_settings.extra_channels]]
-  frequency=867100000
-  min_dr=0
-  max_dr=5
+[network_server.network_settings.class_b]
+ping_slot_dr=0
+ping_slot_frequency=0
 
-  [[network_server.network_settings.extra_channels]]
-  frequency=867300000
-  min_dr=0
-  max_dr=5
+[network_server.network_settings.rejoin_request]
+enabled=false
+max_count_n=0
+max_time_n=0
 
-  [[network_server.network_settings.extra_channels]]
-  frequency=867500000
-  min_dr=0
-  max_dr=5
+[network_server.scheduler]
+scheduler_interval="1s"
 
-  [[network_server.network_settings.extra_channels]]
-  frequency=867700000
-  min_dr=0
-  max_dr=5
+[network_server.scheduler.class_c]
+downlink_lock_duration="2s"
 
-  [[network_server.network_settings.extra_channels]]
-  frequency=867900000
-  min_dr=0
-  max_dr=5
+[network_server.api]
+bind="0.0.0.0:8000"
 
 [network_server.gateway.backend.mqtt]
 server="tcp://mosquitto:1883"
+qos=0
+clean_session=true
+client_id=""
+
+[join_server]
+resolve_join_eui=false
+resolve_domain_suffix=".joineuis.lora-alliance.org"
 
 [join_server.default]
 server="http://chirpstack-application-server:8003"
